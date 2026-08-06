@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>粒子とマウスの庭</title>
+<style>
+body{margin:0;background:#0a0f1e;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;font-family:sans-serif}
+canvas{border-radius:8px;box-shadow:0 0 20px #0003}
+#title{position:absolute;top:20px;color:#445577;font-size:13px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<canvas id="c" width="720" height="480"></canvas>
+<div id="title">粒子とマウスの庭</div>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let W=c.width,H=c.height,mx=W/2,my=H/2;
+const p=[];
+for(let i=0;i<180;i++)p.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,h:200+Math.random()*80});
+function draw(){
+  ctx.fillStyle='#0a0f1e';
+  ctx.fillRect(0,0,W,H);
+  for(let i=0;i<p.length;i++){
+    const q=p[i];
+    const dx=mx-q.x,dy=my-q.y;
+    const d=Math.hypot(dx,dy)||1;
+    q.vx+=dx/d*0.03;q.vy+=dy/d*0.03;
+    q.vx*=0.96;q.vy*=0.96;
+    q.x+=q.vx;q.y+=q.vy;
+    if(q.x<0||q.x>W)q.vx*=-1;
+    if(q.y<0||q.y>H)q.vy*=-1;
+    ctx.fillStyle=`hsla(${q.h},70%,75%,0.75)`;
+    ctx.beginPath();
+    ctx.arc(q.x,q.y,2.8,0,Math.PI*2);
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+c.onmousemove=e=>{const r=c.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;};
+c.onclick=()=>{for(let i=0;i<12;i++){p.push({x:mx+Math.random()*40-20,y:my+Math.random()*40-20,vx:(Math.random()-0.5)*3,vy:(Math.random()-0.5)*3,h:200+Math.random()*80});if(p.length>220)p.shift();}};
+</script>
+</body>
+</html>
