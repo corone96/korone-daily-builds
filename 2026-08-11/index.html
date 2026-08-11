@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>柔らかな粒子流</title>
+<style>
+body{margin:0;background:#0a0f1e;overflow:hidden;touch-action:none}
+canvas{display:block}
+#title{position:absolute;top:12px;left:12px;color:#5a6a8a;font:12px/1 sans-serif;pointer-events:none;opacity:.6}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">柔らかな粒子流</div>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let w,h,ps=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+addEventListener('resize',resize);resize();
+class P{constructor(x,y){this.x=x;this.y=y;this.vx=(Math.random()-0.5)*0.6;this.vy=(Math.random()-0.5)*0.6-0.3;this.life=60+Math.random()*50;this.a=0.7}
+step(){this.x+=this.vx;this.y+=this.vy;this.vx*=0.995;this.vy*=0.995;this.life--;this.a=Math.max(0,this.life/80)}
+draw(){ctx.fillStyle=`rgba(140,170,255,${this.a})`;ctx.beginPath();ctx.arc(this.x,this.y,2.2,0,Math.PI*2);ctx.fill()}}
+function add(x,y){for(let i=0;i<5;i++)ps.push(new P(x,y))}
+function loop(){ctx.fillStyle='#0a0f1e';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(120,150,230,0.12)';ctx.lineWidth=1;
+for(let i=0;i<ps.length;i++){const p=ps[i];p.step();p.draw();
+for(let j=i+1;j<ps.length;j++){const q=ps[j];const d=(p.x-q.x)**2+(p.y-q.y)**2;if(d<9000){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke()}}}
+ps=ps.filter(p=>p.life>0);requestAnimationFrame(loop)}
+loop();
+function onTouch(e){e.preventDefault();const t=e.touches?e.touches[0]:e;add(t.clientX,t.clientY)}
+c.addEventListener('pointerdown',onTouch);c.addEventListener('touchstart',onTouch,{passive:false});
+setInterval(()=>{if(ps.length<80)ps.push(new P(Math.random()*w,Math.random()*h))},800);
+</script>
+</body>
+</html>
