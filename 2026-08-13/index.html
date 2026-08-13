@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>指で揺らす糸</title>
+<style>
+body{margin:0;background:#111;display:flex;height:100vh;touch-action:none}
+canvas{width:100%;height:100%;display:block}
+#title{position:absolute;top:12px;left:12px;color:#666;font-size:13px;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">指で揺らす糸</div>
+<script>
+const c=document.getElementById('c');
+const ctx=c.getContext('2d');
+let W,H,lines=[];
+function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
+addEventListener('resize',resize);resize();
+class Line{
+  constructor(x){this.x=x;this.amp=0;this.phase=Math.random()*6;this.speed=0.03+Math.random()*0.02}
+  update(touch){
+    if(touch){let d=Math.abs(this.x-touch.x);this.amp=Math.max(this.amp,90*(1-d/W*1.2))}
+    this.amp*=0.92;this.phase+=this.speed;
+  }
+  draw(){
+    ctx.strokeStyle='rgba(200,220,255,0.35)';
+    ctx.lineWidth=1.5;ctx.beginPath();
+    for(let y=0;y<H;y+=8){
+      let off=Math.sin(y*0.012+this.phase)*this.amp;
+      ctx.lineTo(this.x+off,y);
+    }
+    ctx.stroke();
+  }
+}
+for(let i=0;i<22;i++)lines.push(new Line(W*(i+0.5)/22));
+let touches=[];
+function addTouch(x,y){touches.push({x,y,life:18});for(let l of lines)l.update({x,y})}
+c.addEventListener('pointerdown',e=>{addTouch(e.clientX,e.clientY)});
+c.addEventListener('pointermove',e=>{if(e.pressure>0.1)addTouch(e.clientX,e.clientY)});
+function loop(){
+  ctx.fillStyle='rgba(17,17,17,0.6)';ctx.fillRect(0,0,W,H);
+  for(let t of touches){t.life--;if(t.life>0){ctx.strokeStyle=`rgba(180,210,255,${t.life/22})`;ctx.beginPath();ctx.arc(t.x,t.y,18-t.life,0,Math.PI*2);ctx.stroke()}}
+  touches=touches.filter(t=>t.life>0);
+  for(let l of lines){l.update();l.draw()}
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
