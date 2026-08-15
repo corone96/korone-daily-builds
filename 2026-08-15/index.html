@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>優しい光の輪</title>
+<style>
+body{margin:0;background:#0a0f1a;overflow:hidden;touch-action:none}
+canvas{display:block;width:100%;height:100vh}
+#title{position:absolute;top:12px;left:50%;transform:translateX(-50%);color:#88aacc;font-size:13px;opacity:0.6;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">優しい光の輪</div>
+<script>
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d',{alpha:true});
+let w,h,particles=[];
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}
+window.addEventListener('resize',resize);resize();
+class Particle{
+constructor(x,y,r,c){
+this.x=x;this.y=y;this.r=r;this.c=c;this.life=1;this.vx=(Math.random()-0.5)*0.6;this.vy=(Math.random()-0.5)*0.6}
+update(){
+this.x+=this.vx;this.y+=this.vy;this.life-=0.012;this.r*=0.985}
+draw(){
+ctx.fillStyle=this.c;ctx.globalAlpha=this.life*0.6;
+ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill()}
+}
+function addRing(x,y){
+for(let i=0;i<18;i++){
+const angle=i/18*Math.PI*2;
+const r=3+Math.random()*4;
+const p=new Particle(x+Math.cos(angle)*6,y+Math.sin(angle)*6,r,'#aaccff');
+p.vx=Math.cos(angle)*1.1;p.vy=Math.sin(angle)*1.1;p.life=1.1;
+particles.push(p)}
+}
+function loop(){
+ctx.fillStyle='rgba(10,15,26,0.18)';ctx.fillRect(0,0,w,h);
+ctx.globalAlpha=1;
+for(let i=particles.length-1;i>=0;i--){
+const p=particles[i];p.update();p.draw();
+if(p.life<0.05)particles.splice(i,1)}
+requestAnimationFrame(loop)}
+loop();
+function handle(e){
+const rect=canvas.getBoundingClientRect();
+const x=(e.clientX||e.touches[0].clientX)-rect.left;
+const y=(e.clientY||e.touches[0].clientY)-rect.top;
+addRing(x,y)}
+canvas.addEventListener('pointerdown',handle);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();handle(e)},{passive:false});
+</script>
+</body>
+</html>
