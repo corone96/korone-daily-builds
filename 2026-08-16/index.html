@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>指先の柔波紋</title>
+<style>
+body{margin:0;overflow:hidden;background:#0a0f1a;touch-action:none}
+canvas{display:block}
+#title{position:fixed;top:12px;left:50%;transform:translateX(-50%);color:#556677;font-size:13px;opacity:.6;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">指先の柔波紋</div>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let w,h,ripples=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+addEventListener('resize',resize);resize();
+function addRipple(x,y){ripples.push({x,y,r:0,a:0.6})}
+function onTouch(e){e.preventDefault();const t=e.touches?e.touches[0]:e;addRipple(t.clientX,t.clientY)}
+c.addEventListener('pointerdown',onTouch);
+c.addEventListener('pointermove',e=>{if(e.pressure>0)onTouch(e)});
+function draw(){
+  ctx.fillStyle='rgba(10,15,26,0.15)';ctx.fillRect(0,0,w,h);
+  for(let i=ripples.length-1;i>=0;i--){
+    const r=ripples[i];r.r+=1.8;r.a-=0.008;
+    if(r.a<=0){ripples.splice(i,1);continue}
+    ctx.strokeStyle=`hsla(200,60%,85%,${r.a})`;
+    ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.stroke();
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(r.x,r.y,r.r*0.6,0,Math.PI*2);ctx.stroke();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
