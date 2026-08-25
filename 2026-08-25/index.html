@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>国境線パズル</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#f0f4f8;color:#222}
+header{padding:8px 12px;background:#fff;border-bottom:1px solid #ccc}
+#title{font-size:14px;margin:0}
+#canvas{display:block;margin:0 auto;background:#e8f0e8;border:1px solid #888;max-width:100%;touch-action:none}
+#info{padding:8px 12px;font-size:13px}
+#score{font-weight:bold;color:#0066cc}
+button{margin:4px 2px;padding:8px 14px;font-size:14px}
+</style>
+</head>
+<body>
+<header><h1 id="title">国境線パズル</h1></header>
+<canvas id="canvas" width="360" height="360"></canvas>
+<div id="info">
+レベル <span id="lv">1</span>　スコア <span id="score">0</span><br>
+目標: 青60% 赤40%
+</div>
+<div style="text-align:center">
+<button id="check">合意チェック</button>
+<button id="next">次のレベル</button>
+<button id="reset">リセット</button>
+</div>
+<script>
+const c=document.getElementById('canvas');
+const ctx=c.getContext('2d');
+let level=1,score=0;
+let points=[80,120,160,200,240];
+let target=[60,40];
+function draw(){
+ctx.clearRect(0,0,360,360);
+ctx.fillStyle='#aaccff';ctx.fillRect(0,0,360,360);
+ctx.fillStyle='#ffccaa';
+ctx.beginPath();
+ctx.moveTo(0,0);
+for(let i=0;i<5;i++)ctx.lineTo(points[i],72*(i+1));
+ctx.lineTo(0,360);ctx.closePath();ctx.fill();
+ctx.strokeStyle='#333';ctx.lineWidth=3;
+ctx.beginPath();
+ctx.moveTo(points[0],72);
+for(let i=1;i<5;i++)ctx.lineTo(points[i],72*(i+1));
+ctx.stroke();
+ctx.fillStyle='#0066cc';ctx.font='14px sans-serif';
+ctx.fillText('青 (A国)',20,30);
+ctx.fillStyle='#cc5500';ctx.fillText('赤 (B国)',260,30);
+}
+function calcArea(){
+let a=0;
+for(let i=0;i<5;i++)a+=points[i];
+return Math.round(a/18);
+}
+function updateScore(){
+const a=calcArea();
+const b=100-a;
+score=Math.max(0,100-Math.abs(a-target[0])*2);
+document.getElementById('score').textContent=score;
+document.getElementById('lv').textContent=level;
+}
+function tap(e){
+const r=c.getBoundingClientRect();
+const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+const y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+let idx=Math.floor(y/72);
+if(idx<0)idx=0;if(idx>4)idx=4;
+points[idx]=Math.max(30,Math.min(330,x));
+draw();updateScore();
+}
+c.addEventListener('pointerdown',tap);
+c.addEventListener('touchstart',tap,{passive:true});
+document.getElementById('check').onclick=()=>{
+updateScore();
+alert(score>=80?'合意成立！':'まだ条件を満たしていません');
+};
+document.getElementById('next').onclick=()=>{
+level=(level%3)+1;
+points=[60+level*10,110,150,190,260-level*8];
+target=level===1?[60,40]:level===2?[55,45]:[65,35];
+draw();updateScore();
+};
+document.getElementById('reset').onclick=()=>{
+points=[80,120,160,200,240];
+draw();updateScore();
+};
+draw();updateScore();
+</script>
+</body>
+</html>
