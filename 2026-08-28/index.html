@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>アヒルロボ配送計画</title>
+<style>
+body{margin:0;background:#111;color:#0f0;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:none}
+canvas{background:#222;border:3px solid #0f0;margin:8px;max-width:100%;height:auto}
+#info,#score{font-size:14px;margin:4px}
+button{margin:4px;padding:8px 16px;background:#003300;color:#0f0;border:1px solid #0f0;font-size:14px}
+</style>
+</head>
+<body>
+<h1 style="font-size:16px;margin:6px">アヒルロボ配送計画</h1>
+<div id="info">タップで経路を追加 → シミュレート</div>
+<canvas id="c" width="320" height="320"></canvas>
+<div id="score">エネルギー: --　時間: --　スコア: --</div>
+<div>
+<button id="sim">シミュレート</button>
+<button id="clr">経路クリア</button>
+<button id="rst">リセット</button>
+</div>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let path=[],obs=[],pickup={x:1,y:1},deliv={x:6,y:6},start={x:0,y:0},cell=40;
+function draw(){
+ctx.fillStyle='#222';ctx.fillRect(0,0,c.width,c.height);
+ctx.strokeStyle='#444';ctx.lineWidth=1;
+for(let x=0;x<8;x++)for(let y=0;y<8;y++){
+ctx.strokeRect(x*cell,y*cell,cell,cell);
+}
+ctx.fillStyle='#f80';obs.forEach(o=>ctx.fillRect(o.x*cell+4,o.y*cell+4,cell-8,cell-8));
+ctx.fillStyle='#0cf';ctx.fillRect(pickup.x*cell+8,pickup.y*cell+8,cell-16,cell-16);
+ctx.fillStyle='#0f0';ctx.fillRect(deliv.x*cell+8,deliv.y*cell+8,cell-16,cell-16);
+ctx.fillStyle='#ff0';ctx.beginPath();ctx.arc((start.x+.5)*cell,(start.y+.5)*cell,10,0,Math.PI*2);ctx.fill();
+ctx.strokeStyle='#0f0';ctx.lineWidth=3;ctx.beginPath();
+if(path.length){
+ctx.moveTo((start.x+.5)*cell,(start.y+.5)*cell);
+path.forEach(p=>ctx.lineTo((p.x+.5)*cell,(p.y+.5)*cell));
+}
+ctx.stroke();
+ctx.fillStyle='#fff';path.forEach((p,i)=>{ctx.beginPath();ctx.arc((p.x+.5)*cell,(p.y+.5)*cell,5,0,Math.PI*2);ctx.fill();});
+}
+function addPoint(e){
+const r=c.getBoundingClientRect();
+let x=Math.floor((e.clientX-r.left)/cell),y=Math.floor((e.clientY-r.top)/cell);
+if(x<0||x>7||y<0||y>7)return;
+path.push({x,y});
+draw();
+}
+c.addEventListener('pointerdown',addPoint);
+function simulate(){
+if(!path.length)return;
+let pts=[start,...path],len=0,energy=0,time=0,score=0;
+for(let i=1;i<pts.length;i++){
+let dx=pts[i].x-pts[i-1].x,dy=pts[i].y-pts[i-1].y;
+len+=Math.hypot(dx,dy);
+}
+energy=Math.floor(len*10);time=Math.floor(len*8);
+let hit=false;
+obs.forEach(o=>{path.forEach(p=>{if(p.x==o.x&&p.y==o.y)hit=true;});});
+let gotPick=path.some(p=>p.x==pickup.x&&p.y==pickup.y);
+let gotDel=path.some(p=>p.x==deliv.x&&p.y==deliv.y);
+score=gotPick&&gotDel?Math.max(1000-energy-time,50):20;
+if(hit)score=0;
+document.getElementById('score').textContent=`エネルギー: ${energy}　時間: ${time}　スコア: ${score}`;
+let i=0,robot={...start};
+function anim(){
+if(i>=path.length)return;
+let tx=path[i].x,ty=path[i].y;
+robot.x+=(tx-robot.x)*0.3;robot.y+=(ty-robot.y)*0.3;
+ctx.fillStyle='#222';ctx.fillRect(0,0,c.width,c.height);
+draw();
+ctx.fillStyle='#ff0';ctx.beginPath();ctx.arc((robot.x+.5)*cell,(robot.y+.5)*cell,12,0,Math.PI*2);ctx.fill();
+if(Math.abs(robot.x-tx)<0.1&&Math.abs(robot.y-ty)<0.1)i++;
+requestAnimationFrame(anim);
+}
+anim();
+}
+document.getElementById('sim').onclick=simulate;
+document.getElementById('clr').onclick=()=>{path=[];document.getElementById('score').textContent='エネルギー: --　時間: --　スコア: --';draw();};
+document.getElementById('rst').onclick=()=>{path=[];obs=[];for(let i=0;i<5;i++)obs.push({x:Math.random()*7|0,y:Math.random()*7|0});draw();document.getElementById('score').textContent='エネルギー: --　時間: --　スコア: --';};
+obs=[{x:3,y:2},{x:4,y:5},{x:2,y:6}];
+draw();
+</script>
+</body>
+</html>
