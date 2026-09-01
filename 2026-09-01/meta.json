@@ -1,10 +1,10 @@
 {
   "date": "2026-09-01",
-  "title": "防災ヒーロータップ",
-  "description": "災害アイコンをタップで防ぎ街を守る",
+  "title": "急流バリアタップ",
+  "description": "洪水から村を守る即時配置ゲーム",
   "kind": "mini-game",
-  "inspiration": "9月1日防災の日と伊勢商店街火災ニュースから",
+  "inspiration": "ネパールの土石流・洪水ニュースから",
   "file": "2026-09-01/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-01/",
-  "created_at": "2026-09-01T08:40:00.515Z"
+  "created_at": "2026-09-01T08:40:20.930Z"
 }
