@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>星霊ロケットタップ</title>
+<style>
+body{margin:0;background:#0a0a2e;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:none}
+#title{font-size:14px;margin:8px 0 4px;opacity:.7}
+#ui{display:flex;justify-content:space-between;width:100%;max-width:480px;padding:0 10px;font-size:14px}
+canvas{background:#112;border:1px solid #334;width:100%;max-width:480px;height:70vh;touch-action:none}
+#msg{font-size:13px;margin:6px 0;min-height:18px;text-align:center}
+button{background:#334;color:#fff;border:0;padding:6px 14px;border-radius:999px;font-size:13px;margin:4px}
+</style>
+</head>
+<body>
+<div id="title">星霊ロケットタップ</div>
+<div id="ui"><span>Phase: <span id="phase">-</span></span><span>Score: <span id="score">0</span></span></div>
+<canvas id="c" width="480" height="640"></canvas>
+<div id="msg">画面をタップしてブースト！</div>
+<button id="retry" style="display:none">もう一度</button>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let W=480,H=640,rocketY=H-80,speed=0,phase=0,score=0,timer=0,state='ready',boosts=[0,0,0];
+function reset(){rocketY=H-80;speed=0;phase=0;score=0;timer=0;state='ready';boosts=[0,0,0];document.getElementById('retry').style.display='none';document.getElementById('msg').innerText='タップで打ち上げ開始';}
+function draw(){
+ctx.fillStyle='#0a0a2e';ctx.fillRect(0,0,W,H);
+ctx.fillStyle='#fff';for(let i=0;i<30;i++){ctx.fillRect((i*37)%W,(i*53+Math.sin(Date.now()/400)*5)%H,1,1)}
+ctx.fillStyle='#334';ctx.fillRect(0,H-40,W,40);
+ctx.fillStyle='#ffcc66';
+ctx.beginPath();ctx.arc(W/2,rocketY-8,18,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#ff99cc';
+ctx.fillRect(W/2-12,rocketY,24,42);
+ctx.fillStyle='#66ccff';
+ctx.fillRect(W/2-4,rocketY+42,8,16);
+if(state==='fail'){
+ctx.fillStyle='#ffaa66';ctx.beginPath();ctx.arc(W/2,rocketY+20,30,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fff';ctx.font='20px sans-serif';ctx.fillText('ぽわっ…',W/2-30,rocketY+60);
+}
+if(state==='success'){
+ctx.fillStyle='#aaffaa';ctx.font='18px sans-serif';ctx.fillText('軌道到達！',W/2-45,80);
+}
+}
+function update(){
+if(state==='launching'){
+timer++;
+speed=Math.max(speed-0.08,0);
+rocketY-=speed;
+if(phase<3){
+if(timer>60){phase++;timer=0;boosts[phase-1]=0;}
+}
+if(rocketY<120&&phase>=3){state='success';score=Math.floor(rocketY*-1.2+1200);}
+if(rocketY>H+30){state='fail';}
+}
+}
+function loop(){update();draw();requestAnimationFrame(loop);}
+function tap(){
+if(state==='ready'){state='launching';phase=1;timer=0;speed=4;document.getElementById('msg').innerText='タイミングよくタップ！';}
+else if(state==='launching'&&phase<=3){
+let good=timer>20&&timer<45;
+if(good){speed+=5.5;score+=80;boosts[phase-1]=1;}
+else{speed+=1.5;score+=20;}
+if(phase===3&&timer>50)state='fail';
+}
+else if(state==='fail'||state==='success')reset();
+updateUI();
+}
+function updateUI(){
+document.getElementById('phase').innerText=state==='launching'?phase:'-';document.getElementById('score').innerText=score;
+}
+c.addEventListener('pointerdown',tap);
+c.addEventListener('touchstart',e=>{e.preventDefault();tap();});
+document.getElementById('retry').onclick=()=>{reset();updateUI();};
+reset();loop();setInterval(updateUI,200);
+</script>
+</body>
+</html>
