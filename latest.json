@@ -1,10 +1,10 @@
 {
   "date": "2026-09-03",
-  "title": "星霊ロケットタップ",
-  "description": "タイミングタップで可愛いロケットを軌道に乗せるミニゲーム",
+  "title": "ダム水守り村",
+  "description": "タップでバルブ操作し村の水を管理するミニゲーム",
   "kind": "mini-game",
-  "inspiration": "ISROのEOS-05衛星打ち上げニュースから",
+  "inspiration": "四国早明浦ダム貯水率低下ニュース",
   "file": "2026-09-03/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-03/",
-  "created_at": "2026-09-03T08:40:00.451Z"
+  "created_at": "2026-09-03T08:40:18.922Z"
 }
