@@ -1,10 +1,10 @@
 {
   "date": "2026-09-05",
-  "title": "洪水救助ラッシュ",
-  "description": "タップでボート操り被災者をタイミング救助",
+  "title": "洞窟灯り導き",
+  "description": "タップで灯火を灯し迷子を洞窟から救出",
   "kind": "mini-game",
-  "inspiration": "ネパール洪水の救助活動ニュースから着想",
+  "inspiration": "ネパール洪水のトンネル救出ニュースから",
   "file": "2026-09-05/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-05/",
-  "created_at": "2026-09-05T08:40:00.481Z"
+  "created_at": "2026-09-05T08:40:20.706Z"
 }
