@@ -1,10 +1,10 @@
 {
   "date": "2026-09-07",
-  "title": "白露露玉配置",
-  "description": "露の玉を並べて秋の模様を完成させる論理配置パズル",
+  "title": "島守り配置パズル",
+  "description": "土砂から島を守る論理配置パズル",
   "kind": "mini-game",
-  "inspiration": "2026/9/7の白露（二十四節気）から",
+  "inspiration": "関東豪雨と伊豆諸島の土砂災害特別警報",
   "file": "2026-09-07/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-07/",
-  "created_at": "2026-09-07T08:40:00.480Z"
+  "created_at": "2026-09-07T08:40:23.676Z"
 }
