@@ -1,10 +1,10 @@
 {
   "date": "2026-09-09",
-  "title": "ルネサンス配置展",
-  "description": "美術品を条件で配置する論理パズル",
+  "title": "名画調和パズル",
+  "description": "ルネサンス絵画をグリッドに条件満たす配置",
   "kind": "mini-game",
-  "inspiration": "ルーヴル美術館展ルネサンスの開催",
+  "inspiration": "ルーヴル美術館展ルネサンス本日開催",
   "file": "2026-09-09/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-09/",
-  "created_at": "2026-09-09T08:40:00.477Z"
+  "created_at": "2026-09-09T08:40:27.217Z"
 }
