@@ -1,10 +1,10 @@
 {
   "date": "2026-09-11",
-  "title": "追悼名配置論理",
-  "description": "9.11メモリアルに犠牲者名を論理配置するパズル",
+  "title": "追悼配置論理陣",
+  "description": "9/11三遺跡の献花・灯籠を論理条件で配置するパズル",
   "kind": "mini-game",
-  "inspiration": "9.11同時多発テロ25周年記念式典から",
+  "inspiration": "9/11追悼25周年式典の献花・灯籠配置から",
   "file": "2026-09-11/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-11/",
-  "created_at": "2026-09-11T08:40:00.535Z"
+  "created_at": "2026-09-11T08:40:30.969Z"
 }
