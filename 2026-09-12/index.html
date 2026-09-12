@@ -1,1 +1,117 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>秋祭り灯配置</title><style>body{margin:0;background:#1a120b;color:#ffe8c2;font-family:sans-serif}header{padding:8px;text-align:center;font-size:14px;border-bottom:2px solid #ff9f1c} #score{font-size:18px;margin:4px} #grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;max-width:480px;margin:0 auto;background:#3a2a1f;border:4px solid #ff9f1c;border-radius:8px;touch-action:none} .cell{width:100%;aspect-ratio:1;background:#5c4633;border:2px solid #ff9f1c;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;user-select:none} .cell:active{background:#ff9f1c;color:#1a120b} #sel{display:flex;justify-content:center;gap:8px;margin:8px;flex-wrap:wrap} button{background:#ff9f1c;color:#1a120b;border:none;padding:8px 14px;border-radius:20px;font-size:14px} button:active{background:#e67e00} .info{font-size:12px;text-align:center;margin:4px;color:#ffcc99}</style></head><body><header><div>秋祭り灯配置</div><div id="score">スコア: 0</div></header><div id="sel"><button data-t="提">提灯</button><button data-t="屋">屋台</button><button data-t="御">みこし</button><button id="clear">クリア</button></div><div id="grid"></div><div class="info">タップ配置 / 長押し回転・削除<br>隣接禁止・バランス・視界で高得点</div><script>const gridEl=document.getElementById('grid'),scoreEl=document.getElementById('score');let grid=Array(25).fill(null),sel='提',score=0;function draw(){gridEl.innerHTML='';for(let i=0;i<25;i++){const c=document.createElement('div');c.className='cell';c.dataset.i=i;if(grid[i])c.textContent=grid[i];gridEl.appendChild(c)}calcScore()}function calcScore(){let s=0,types={提:0,屋:0,御:0};for(let i=0;i<25;i++)if(grid[i]){types[grid[i]]++;const x=i%5,y=i/5|0;[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>{const nx=x+dx,ny=y+dy;if(nx>=0&&nx<5&&ny>=0&&ny<5){const ni=ny*5+nx;if(grid[ni]===grid[i])s-=5}})}const bal=Math.min(types.提,types.屋,types.御)*3;s+=bal*4;let vis=0;for(let i=0;i<25;i++)if(!grid[i])vis++;s+=vis*2;score=Math.max(0,s);scoreEl.textContent='スコア: '+score}let pressT;gridEl.addEventListener('pointerdown',e=>{const i=+e.target.dataset.i;if(isNaN(i))return;pressT=setTimeout(()=>{if(grid[i]){grid[i]=grid[i]==='提'?'屋':grid[i]==='屋'?'御':'提';draw()}},450);e.target.onpointerup=()=>{clearTimeout(pressT);if(!grid[i]){grid[i]=sel;draw()}else if(Date.now()-pressT<400){grid[i]=null;draw()};e.target.onpointerup=null}});gridEl.addEventListener('pointerleave',()=>clearTimeout(pressT));document.querySelectorAll('#sel button[data-t]').forEach(b=>b.onclick=()=>sel=b.dataset.t);document.getElementById('clear').onclick=()=>{grid.fill(null);draw()};draw();</script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ミサイル外交論理陣</title>
+<style>
+body{margin:0;background:#0a1628;color:#ddd;font-family:sans-serif;touch-action:none}
+#wrap{max-width:480px;margin:0 auto;padding:8px}
+h1{font-size:14px;margin:4px 0;color:#8cf;text-align:center}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:#334;border:3px solid #556;padding:4px;margin:8px 0}
+.cell{width:100%;aspect-ratio:1;background:#112;border:1px solid #445;display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;user-select:none}
+.cell.missile{background:#311;color:#f66}
+.cell.ok{background:#132}
+.cell.inter{background:#248;color:#8cf}
+.cell.dip{background:#284;color:#8f8}
+#pal{display:flex;gap:8px;justify-content:center;margin:8px 0}
+.btn{padding:8px 14px;background:#223;border:2px solid #556;border-radius:6px;font-size:13px}
+.btn.sel{border-color:#8cf}
+#stat{font-size:12px;text-align:center;margin:4px 0;height:18px}
+#info{font-size:10px;color:#688;text-align:center}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>ミサイル外交論理陣</h1>
+<div id="grid"></div>
+<div id="pal">
+<div class="btn" data-p="I">迎撃装置</div>
+<div class="btn" data-p="D">外交官</div>
+</div>
+<div id="stat"></div>
+<div id="info">タップ:配置　長押し:除去　脅威を全部中和せよ</div>
+</div>
+<script>
+const W=5,H=5;
+let grid=[],missiles=[[1,2],[3,1],[4,3]],sel='I',placed=[];
+const g=document.getElementById('grid');
+const stat=document.getElementById('stat');
+function init(){
+  grid=Array.from({length:H},()=>Array(W).fill(0));
+  placed=[];
+  g.innerHTML='';
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const c=document.createElement('div');
+    c.className='cell';
+    c.dataset.x=x;c.dataset.y=y;
+    c.addEventListener('pointerdown',e=>onTap(e,c));
+    let t=0;
+    c.addEventListener('pointerdown',()=>{clearTimeout(t);t=setTimeout(()=>remove(x,y),420)});
+    g.appendChild(c);
+  }
+  missiles.forEach(m=>{
+    const idx=m[1]*W+m[0];
+    g.children[idx].classList.add('missile');
+  });
+  update();
+}
+function onTap(e,c){
+  const x=+c.dataset.x,y=+c.dataset.y;
+  if(grid[y][x])return;
+  if(sel==='I')grid[y][x]=1;
+  else grid[y][x]=2;
+  placed.push([x,y]);
+  render();
+  checkWin();
+}
+function remove(x,y){
+  if(!grid[y][x])return;
+  grid[y][x]=0;
+  placed=placed.filter(p=>!(p[0]===x&&p[1]===y));
+  render();
+  checkWin();
+}
+function render(){
+  [...g.children].forEach(c=>{
+    c.className='cell';
+    const x=+c.dataset.x,y=+c.dataset.y;
+    if(grid[y][x]===1)c.classList.add('inter');
+    else if(grid[y][x]===2)c.classList.add('dip');
+    else if(missiles.some(m=>m[0]===x&&m[1]===y))c.classList.add('missile');
+  });
+}
+function checkWin(){
+  let covered=0,over=false;
+  missiles.forEach(m=>{
+    const x=m[0],y=m[1];
+    if(grid[y][x])over=true;
+    let cov=false;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+      const nx=x+dx,ny=y+dy;
+      if(nx>=0&&nx<W&&ny>=0&&ny<H&&grid[ny][nx]===1)cov=true;
+    }
+    for(let i=0;i<W;i++)if(grid[y][i]===2||grid[i][x]===2)cov=true;
+    if(cov)covered++;
+  });
+  if(over){stat.textContent='重複禁止！';stat.style.color='#f66';return;}
+  if(covered===missiles.length&&placed.length<=4){
+    stat.textContent='外交成功！';stat.style.color='#8f8';
+  }else{
+    stat.textContent=`中和:${covered}/${missiles.length}`;stat.style.color='#8cf';
+  }
+}
+function update(){render();checkWin();}
+document.querySelectorAll('#pal .btn').forEach(b=>{
+  b.addEventListener('pointerdown',()=>{
+    document.querySelectorAll('#pal .btn').forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel');
+    sel=b.dataset.p;
+  });
+});
+document.getElementById('pal').children[0].classList.add('sel');
+init();
+window.onresize=()=>{};
+</script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 {
   "date": "2026-09-12",
-  "title": "秋祭り灯配置",
-  "description": "秋の花火祭りで提灯と屋台を条件満たす配置パズル",
+  "title": "ミサイル外交論理陣",
+  "description": "地域グリッドに防衛・外交ピースを条件配置するパズル",
   "kind": "mini-game",
-  "inspiration": "2026/9/12開催の調布花火や吉祥寺秋まつりから",
+  "inspiration": "北朝鮮のSRBMミサイル発射実験",
   "file": "2026-09-12/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-12/",
-  "created_at": "2026-09-12T08:40:00.479Z"
+  "created_at": "2026-09-12T08:40:02.200Z"
 }
