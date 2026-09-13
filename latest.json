@@ -1,10 +1,10 @@
 {
   "date": "2026-09-13",
-  "title": "連立形成論理陣",
-  "description": "政党ピースを議席グリッドに配置し連立条件を満たすパズル",
+  "title": "選挙連立配置陣",
+  "description": "政党ピースを配置し連立条件を満たす",
   "kind": "mini-game",
-  "inspiration": "2026年スウェーデン総選挙の連立交渉から着想",
+  "inspiration": "スウェーデン総選挙の投票日",
   "file": "2026-09-13/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-13/",
-  "created_at": "2026-09-13T08:40:00.466Z"
+  "created_at": "2026-09-13T08:40:33.747Z"
 }
