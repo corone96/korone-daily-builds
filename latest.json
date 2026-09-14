@@ -1,10 +1,10 @@
 {
   "date": "2026-09-14",
-  "title": "花火タイミングタップ",
-  "description": "花火大会の打ち上げをタイミング合わせて楽しむリズムゲーム",
+  "title": "花火タイミング撃ち",
+  "description": "花火のタイミングを合わせて連発するリズムミニゲーム",
   "kind": "mini-game",
-  "inspiration": "今日開催の各地花火大会から着想",
+  "inspiration": "今日の各地花火大会から着想",
   "file": "2026-09-14/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-14/",
-  "created_at": "2026-09-14T08:40:00.438Z"
+  "created_at": "2026-09-14T08:40:07.207Z"
 }
