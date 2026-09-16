@@ -1,10 +1,10 @@
 {
   "date": "2026-09-16",
-  "title": "オゾンUV避けスワイプ",
-  "description": "スワイプとタップでUVを避けスコアを稼ぐコメディアクション",
+  "title": "オゾンシールドタップ",
+  "description": "UVをタイミングタップでブロックするコメディ防衛ゲーム",
   "kind": "mini-game",
-  "inspiration": "世界オゾンデーから着想",
+  "inspiration": "世界オゾンデーから",
   "file": "2026-09-16/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-16/",
-  "created_at": "2026-09-16T08:40:00.490Z"
+  "created_at": "2026-09-16T08:40:09.503Z"
 }
