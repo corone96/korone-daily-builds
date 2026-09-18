@@ -1,10 +1,10 @@
 {
   "date": "2026-09-18",
-  "title": "花火エンバーキャッチ",
-  "description": "落ちる花火欠片をスワイプ移動でキャッチするアクション",
+  "title": "バーガースタックタップ",
+  "description": "タイミングタップで具材を積んで完璧バーガーを作る",
   "kind": "mini-game",
-  "inspiration": "今日の全国花火大会（洞爺湖など）から",
+  "inspiration": "ナショナルチーズバーガーデーの話題から",
   "file": "2026-09-18/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-18/",
-  "created_at": "2026-09-18T08:40:00.469Z"
+  "created_at": "2026-09-18T08:40:14.906Z"
 }
