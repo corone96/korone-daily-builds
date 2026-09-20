@@ -1,10 +1,10 @@
 {
   "date": "2026-09-20",
-  "title": "ピニャータブレイカー",
-  "description": "タイミングタップでメキシコ祭りピニャータを割る",
+  "title": "雨粒よけスワイプ",
+  "description": "スワイプで傘を動かし雨を避けるコメディ避けゲーム",
   "kind": "mini-game",
-  "inspiration": "お台場フィエスタ・メヒカーナのピニャータ割り",
+  "inspiration": "台風25号接近の天気ニュース",
   "file": "2026-09-20/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-20/",
-  "created_at": "2026-09-20T08:40:00.452Z"
+  "created_at": "2026-09-20T08:40:20.306Z"
 }
