@@ -1,10 +1,10 @@
 {
   "date": "2026-09-22",
-  "title": "冠水庭回復器",
-  "description": "タップで冠水庭を植物と排水で修復するツール",
+  "title": "外交バランス蓄積器",
+  "description": "タップで国旗ピースを重ねて合意スコアを育てるツール",
   "kind": "tool",
-  "inspiration": "台風25号の千葉冠水・土砂被害回復ニュースから",
+  "inspiration": "国連総会の開幕と首脳会談のニュースから",
   "file": "2026-09-22/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-22/",
-  "created_at": "2026-09-22T08:40:00.579Z"
+  "created_at": "2026-09-22T08:40:26.106Z"
 }

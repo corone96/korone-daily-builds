@@ -1,1 +1,60 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>冠水庭回復器</title><style>body{margin:0;background:#0a2f1f;color:#ddd;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:none}header{padding:8px;font-size:14px;opacity:.7}#garden{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:92vw;max-width:420px;height:92vw;max-height:420px;background:#1a4a33;border:6px solid #3a6a53;border-radius:12px;padding:6px;margin:10px 0} .cell{width:100%;height:100%;background:#3a8ab8;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .2s;cursor:pointer;user-select:none} .cell.drain{background:#777;color:#ccc} .cell.plant{background:#4a9c4a;color:#fff} .cell.grown{background:#2e7d32;transform:scale(1.05)}#status{display:flex;gap:20px;font-size:15px;margin:4px 0}#bar{width:92vw;max-width:420px;height:14px;background:#1a4a33;border-radius:7px;overflow:hidden}#fill{height:100%;background:#7cc97c;width:0%}button{padding:8px 16px;margin:4px;font-size:15px;background:#2a5f45;color:#fff;border:none;border-radius:8px} .msg{font-size:13px;opacity:.8;height:18px}</style></head><body><header>冠水庭回復器</header><div id="status"><div>緑化率 <span id="green">0</span>%</div><div>安定度 <span id="stable">0</span></div></div><div id="garden"></div><div id="bar"><div id="fill"></div></div><div class="msg" id="msg"></div><div><button id="drain">排水路</button><button id="seed">苗</button><button id="reset">リセット</button></div><script>const SIZE=5;let grid=[],green=0,stable=0;const garden=document.getElementById('garden');const fill=document.getElementById('fill');const msg=document.getElementById('msg');function init(){garden.innerHTML='';grid=[];green=0;stable=0;updateUI();for(let y=0;y<SIZE;y++){for(let x=0;x<SIZE;x++){const c=document.createElement('div');c.className='cell';c.dataset.x=x;c.dataset.y=y;c.dataset.state='flood';c.addEventListener('pointerdown',tap);garden.appendChild(c);grid.push(c);}}}function tap(e){const c=e.currentTarget;if(c.dataset.state!=='flood')return;const mode=document.activeElement&&document.activeElement.id==='seed'?'seed':'drain';if(mode==='drain'){c.classList.add('drain');c.dataset.state='drain';c.innerHTML='💧';stable+=8;}else{c.classList.add('plant');c.dataset.state='plant';c.innerHTML='🌱';green+=6;stable+=4;}updateUI();setTimeout(()=>{grow(c)},280);}function grow(c){if(!c||c.dataset.state==='grown')return;if(c.dataset.state==='drain'){c.style.background='#555';stable+=4;}else if(c.dataset.state==='plant'){c.classList.remove('plant');c.classList.add('grown');c.innerHTML='🌿';green+=9;stable+=7;}updateUI();if(green>=100){win();}}function updateUI(){document.getElementById('green').textContent=Math.min(100,green);document.getElementById('stable').textContent=stable;fill.style.width=Math.min(100,Math.floor((green+stable/3)))+'%';if(green>70)msg.textContent='庭が息を吹き返した！';else if(green>40)msg.textContent='排水が進んでいる';else msg.textContent='';}function win(){msg.textContent='🎉 冠水庭完全回復！ ユーモア満点の緑化完了';setTimeout(()=>{msg.textContent='また遊ぼう！'},1800);}document.getElementById('drain').onclick=()=>{};document.getElementById('seed').onclick=()=>{};document.getElementById('reset').onclick=init;init();</script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>外交バランス蓄積器</title>
+<style>
+body{margin:0;background:#f8f1e3;font-family:sans-serif;-webkit-tap-highlight-color:transparent}
+#title{font-size:14px;text-align:center;padding:8px;color:#555}
+#score{text-align:center;font-size:18px;font-weight:bold;margin:4px}
+#pile{position:relative;width:100%;height:65vh;max-height:420px;margin:0 auto;border:3px solid #8b5a2b;background:#e8d9b8;overflow:hidden;touch-action:none}
+.piece{position:absolute;width:42px;height:28px;border:1px solid #333;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s}
+#log{position:absolute;bottom:8px;left:8px;right:8px;font-size:13px;color:#444;text-align:center;min-height:20px}
+#taparea{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="title">外交バランス蓄積器</div>
+<div id="score">合意スコア: <span id="num">0</span></div>
+<div id="pile">
+  <div id="taparea"></div>
+  <div id="log"></div>
+</div>
+<script>
+const pile=document.getElementById('pile');
+const tap=document.getElementById('taparea');
+const num=document.getElementById('num');
+const log=document.getElementById('log');
+let score=0,pieces=0;
+const flags=['🇯🇵','🇺🇸','🇨🇳','🇰🇷','🇫🇷','🇩🇪'];
+function addPiece(e){
+  if(e.cancelable)e.preventDefault();
+  const x=Math.random()* (pile.clientWidth-50);
+  const y=Math.random()* (pile.clientHeight-80)+20;
+  const rot=(Math.random()-0.5)*40;
+  const el=document.createElement('div');
+  el.className='piece';
+  el.style.left=x+'px';
+  el.style.top=y+'px';
+  el.style.transform=`rotate(${rot}deg)`;
+  el.style.background=score>12?'#d4e8c2':'#fff';
+  el.style.zIndex=++pieces;
+  el.innerHTML=flags[Math.floor(Math.random()*flags.length)];
+  pile.appendChild(el);
+  score+=Math.floor(Math.random()*3)+2;
+  num.textContent=score;
+  if(Math.random()<0.18){
+    log.textContent=['貿易摩擦！','同盟破棄？','ビザ問題発生','首脳会談延期'][Math.floor(Math.random()*4)];
+    setTimeout(()=>{log.textContent='';if(score>5){score-=3;num.textContent=score;}},1200);
+  }
+  if(score>25){
+    pile.style.borderColor='#2e7d32';
+    log.textContent='合意成立！';
+  }
+}
+tap.addEventListener('pointerdown',addPiece,{passive:false});
+tap.addEventListener('touchstart',addPiece,{passive:false});
+</script>
+</body>
+</html>
