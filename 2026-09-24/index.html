@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>秋月収穫パズル</title>
+<style>
+body{margin:0;background:#112;font-family:sans-serif;color:#ddd;display:flex;flex-direction:column;align-items:center;touch-action:none}
+#title{font-size:14px;margin:8px 0 4px;opacity:.7}
+#canvas{border:2px solid #444;border-radius:8px;background:#223;cursor:pointer}
+#ui{display:flex;gap:12px;margin:8px;align-items:center}
+#score{font-size:18px}
+#moon{width:80px;height:20px;background:#fff;border-radius:10px;box-shadow:0 0 12px #ff8}
+#comment{min-height:22px;font-size:13px;color:#ff8;margin:4px}
+</style>
+</head>
+<body>
+<div id="title">秋月収穫パズル</div>
+<canvas id="canvas" width="320" height="320"></canvas>
+<div id="ui">
+<div id="score">スコア: 0</div>
+<div id="moon" style="opacity:0.2"></div>
+</div>
+<div id="comment"></div>
+<script>
+const c=document.getElementById('canvas'),ctx=c.getContext('2d');
+const W=320,S=40,G=8;
+let grid=[],score=0;
+const states=6,colors=['#e55','#8c5','#f93','#a74','#5af','#e8a'];
+function init(){
+  grid=Array(G*G).fill(0).map(()=>Math.floor(Math.random()*states));
+  score=0;draw();updateUI();
+}
+function draw(){
+  ctx.fillStyle='#223';ctx.fillRect(0,0,W,W);
+  for(let i=0;i<G*G;i++){
+    const x=(i%G)*S,y=Math.floor(i/G)*S,v=grid[i];
+    if(v===-1)continue;
+    ctx.fillStyle=colors[v];
+    ctx.beginPath();
+    if(v%3===0){ctx.ellipse(x+S/2,y+S/2,S/2.2,S/3,0,0,Math.PI*2)} // leaf
+    else if(v%3===1){ctx.arc(x+S/2,y+S/2,S/2.5,0,Math.PI*2)} // fruit
+    else {ctx.rect(x+S/4,y+S/4,S/2,S/2)} // acorn
+    ctx.fill();
+    ctx.strokeStyle='#fff8';ctx.stroke();
+  }
+}
+function pos(e){
+  const r=c.getBoundingClientRect();
+  return {x:Math.floor((e.clientX-r.left)/S),y:Math.floor((e.clientY-r.top)/S)};
+}
+function cycle(x,y){
+  const i=y*G+x;if(i<0||i>=grid.length)return;
+  grid[i]=(grid[i]+1)%states;
+  draw();
+  const cleared=check();
+  if(cleared>0){
+    score+=cleared*10;
+    updateUI();
+    setTimeout(()=>{draw();},120);
+  }
+}
+c.addEventListener('pointerdown',e=>{
+  const p=pos(e);
+  if(p.x>=0&&p.x<G&&p.y>=0&&p.y<G)cycle(p.x,p.y);
+}, {passive:true});
+function check(){
+  let del=0,vis=Array(G*G).fill(0);
+  for(let i=0;i<G*G;i++){
+    if(grid[i]===-1||vis[i])continue;
+    const v=grid[i],grp=[];
+    const q=[i];vis[i]=1;
+    while(q.length){
+      const j=q.pop();grp.push(j);
+      [[-1,0],[1,0],[0,-1],[0,1]].forEach(d=>{
+        const nx=(j%G)+d[0],ny=Math.floor(j/G)+d[1];
+        if(nx>=0&&nx<G&&ny>=0&&ny<G){
+          const ni=ny*G+nx;
+          if(!vis[ni]&&grid[ni]===v){vis[ni]=1;q.push(ni);}
+        }
+      });
+    }
+    if(grp.length>=3){
+      grp.forEach(k=>grid[k]=-1);
+      del+=grp.length;
+      showComment();
+    }
+  }
+  return del;
+}
+function showComment(){
+  const msgs=['月が輝いた！','いい収穫だね','秋の味覚ゲット','夜が明るくなったよ','また一つ消えた！'];
+  document.getElementById('comment').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  setTimeout(()=>document.getElementById('comment').textContent='',1400);
+}
+function updateUI(){
+  document.getElementById('score').textContent='スコア: '+score;
+  const op=Math.min(0.2+score/600,0.95);
+  document.getElementById('moon').style.opacity=op;
+}
+init();
+</script>
+</body>
+</html>
