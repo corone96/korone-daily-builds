@@ -2,103 +2,108 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>秋月収穫パズル</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIデータ積み器</title>
 <style>
-body{margin:0;background:#112;font-family:sans-serif;color:#ddd;display:flex;flex-direction:column;align-items:center;touch-action:none}
-#title{font-size:14px;margin:8px 0 4px;opacity:.7}
-#canvas{border:2px solid #444;border-radius:8px;background:#223;cursor:pointer}
-#ui{display:flex;gap:12px;margin:8px;align-items:center}
-#score{font-size:18px}
-#moon{width:80px;height:20px;background:#fff;border-radius:10px;box-shadow:0 0 12px #ff8}
-#comment{min-height:22px;font-size:13px;color:#ff8;margin:4px}
+body{margin:0;background:#0a0f1e;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;height:100vh;touch-action:none}
+header{padding:8px;text-align:center;font-size:14px;border-bottom:1px solid #334}
+#score{display:flex;justify-content:space-around;padding:6px 10px;background:#112}
+#canvas{flex:1;background:#112;display:block;width:100%;touch-action:none}
+#controls{display:flex;gap:4px;padding:8px;justify-content:center;flex-wrap:wrap}
+button{padding:8px 14px;border:none;border-radius:6px;background:#334;color:#fff;font-size:13px}
+button:active{background:#556}
+#level{font-size:18px;font-weight:bold}
 </style>
 </head>
 <body>
-<div id="title">秋月収穫パズル</div>
-<canvas id="canvas" width="320" height="320"></canvas>
-<div id="ui">
-<div id="score">スコア: 0</div>
-<div id="moon" style="opacity:0.2"></div>
+<header>AIデータ積み器 <small>by コロネ</small></header>
+<div id="score">
+<div>セキュリティスコア: <span id="sc">0</span></div>
+<div id="level">Lv.1</div>
 </div>
-<div id="comment"></div>
+<canvas id="canvas" width="360" height="520"></canvas>
+<div id="controls">
+<button data-c="#e74c3c" data-s="rect">赤ブロック</button>
+<button data-c="#3498db" data-s="circle">青ブロック</button>
+<button data-c="#2ecc71" data-s="tri">緑三角</button>
+<button data-c="#f1c40f" data-s="rect">黄四角</button>
+<button onclick="resetAll()">リセット</button>
+</div>
 <script>
-const c=document.getElementById('canvas'),ctx=c.getContext('2d');
-const W=320,S=40,G=8;
-let grid=[],score=0;
-const states=6,colors=['#e55','#8c5','#f93','#a74','#5af','#e8a'];
-function init(){
-  grid=Array(G*G).fill(0).map(()=>Math.floor(Math.random()*states));
-  score=0;draw();updateUI();
+const c=document.getElementById('canvas');
+const ctx=c.getContext('2d');
+let blocks=[],score=0,level=1;
+let currentColor='#e74c3c',currentShape='rect';
+
+function drawAI(lv){
+  ctx.save();
+  ctx.translate(260,80);
+  ctx.fillStyle='#555';
+  ctx.fillRect(-25,0,50,70);
+  ctx.fillStyle='#0f8';
+  ctx.fillRect(-12,15,24,24);
+  if(lv>=2){ctx.fillStyle='#f80';ctx.fillRect(-30,40,15,15);ctx.fillRect(15,40,15,15)}
+  if(lv>=3){ctx.strokeStyle='#ff0';ctx.lineWidth=3;ctx.strokeRect(-35,-10,70,90)}
+  if(lv>=4){ctx.fillStyle='#f0f';ctx.beginPath();ctx.arc(0,-15,18,0,Math.PI*2);ctx.fill()}
+  ctx.restore();
 }
+
 function draw(){
-  ctx.fillStyle='#223';ctx.fillRect(0,0,W,W);
-  for(let i=0;i<G*G;i++){
-    const x=(i%G)*S,y=Math.floor(i/G)*S,v=grid[i];
-    if(v===-1)continue;
-    ctx.fillStyle=colors[v];
-    ctx.beginPath();
-    if(v%3===0){ctx.ellipse(x+S/2,y+S/2,S/2.2,S/3,0,0,Math.PI*2)} // leaf
-    else if(v%3===1){ctx.arc(x+S/2,y+S/2,S/2.5,0,Math.PI*2)} // fruit
-    else {ctx.rect(x+S/4,y+S/4,S/2,S/2)} // acorn
-    ctx.fill();
-    ctx.strokeStyle='#fff8';ctx.stroke();
-  }
+  ctx.fillStyle='#112';
+  ctx.fillRect(0,0,c.width,c.height);
+  blocks.forEach(b=>{
+    ctx.fillStyle=b.color;
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=1;
+    if(b.shape==='rect'){
+      ctx.fillRect(b.x-12,b.y-12,24,24);
+    }else if(b.shape==='circle'){
+      ctx.beginPath();ctx.arc(b.x,b.y,13,0,Math.PI*2);ctx.fill();
+    }else if(b.shape==='tri'){
+      ctx.beginPath();ctx.moveTo(b.x,b.y-14);ctx.lineTo(b.x-14,b.y+12);ctx.lineTo(b.x+14,b.y+12);ctx.closePath();ctx.fill();
+    }
+  });
+  drawAI(level);
+  ctx.fillStyle='#fff';
+  ctx.font='12px sans-serif';
+  ctx.fillText('タップでデータ配置',20,500);
 }
-function pos(e){
-  const r=c.getBoundingClientRect();
-  return {x:Math.floor((e.clientX-r.left)/S),y:Math.floor((e.clientY-r.top)/S)};
-}
-function cycle(x,y){
-  const i=y*G+x;if(i<0||i>=grid.length)return;
-  grid[i]=(grid[i]+1)%states;
+
+function placeBlock(x,y){
+  blocks.push({x,y,color:currentColor,shape:currentShape});
+  score+=Math.floor(Math.random()*3)+4;
+  if(blocks.length>18)score+=2;
+  document.getElementById('sc').textContent=score;
+  const newLv=Math.min(5,Math.floor(score/28)+1);
+  if(newLv!==level){level=newLv;document.getElementById('level').textContent='Lv.'+level}
+  if(score>=120){document.getElementById('level').textContent='Lv.MAX 安全！'}
   draw();
-  const cleared=check();
-  if(cleared>0){
-    score+=cleared*10;
-    updateUI();
-    setTimeout(()=>{draw();},120);
-  }
 }
+
+function resetAll(){
+  blocks=[];score=0;level=1;
+  document.getElementById('sc').textContent='0';
+  document.getElementById('level').textContent='Lv.1';
+  draw();
+}
+
 c.addEventListener('pointerdown',e=>{
-  const p=pos(e);
-  if(p.x>=0&&p.x<G&&p.y>=0&&p.y<G)cycle(p.x,p.y);
-}, {passive:true});
-function check(){
-  let del=0,vis=Array(G*G).fill(0);
-  for(let i=0;i<G*G;i++){
-    if(grid[i]===-1||vis[i])continue;
-    const v=grid[i],grp=[];
-    const q=[i];vis[i]=1;
-    while(q.length){
-      const j=q.pop();grp.push(j);
-      [[-1,0],[1,0],[0,-1],[0,1]].forEach(d=>{
-        const nx=(j%G)+d[0],ny=Math.floor(j/G)+d[1];
-        if(nx>=0&&nx<G&&ny>=0&&ny<G){
-          const ni=ny*G+nx;
-          if(!vis[ni]&&grid[ni]===v){vis[ni]=1;q.push(ni);}
-        }
-      });
-    }
-    if(grp.length>=3){
-      grp.forEach(k=>grid[k]=-1);
-      del+=grp.length;
-      showComment();
-    }
-  }
-  return del;
-}
-function showComment(){
-  const msgs=['月が輝いた！','いい収穫だね','秋の味覚ゲット','夜が明るくなったよ','また一つ消えた！'];
-  document.getElementById('comment').textContent=msgs[Math.floor(Math.random()*msgs.length)];
-  setTimeout(()=>document.getElementById('comment').textContent='',1400);
-}
-function updateUI(){
-  document.getElementById('score').textContent='スコア: '+score;
-  const op=Math.min(0.2+score/600,0.95);
-  document.getElementById('moon').style.opacity=op;
-}
-init();
+  const r=c.getBoundingClientRect();
+  const x=(e.clientX-r.left)*(c.width/r.width);
+  const y=(e.clientY-r.top)*(c.height/r.height);
+  placeBlock(x,y);
+},false);
+
+document.querySelectorAll('#controls button[data-c]').forEach(btn=>{
+  btn.addEventListener('pointerdown',()=>{
+    currentColor=btn.dataset.c;
+    currentShape=btn.dataset.s;
+    btn.style.border='2px solid #fff';
+    setTimeout(()=>btn.style.border='',180);
+  });
+});
+
+window.onload=()=>{draw();}
 </script>
 </body>
 </html>

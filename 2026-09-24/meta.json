@@ -1,10 +1,10 @@
 {
   "date": "2026-09-24",
-  "title": "秋月収穫パズル",
-  "description": "タップで色形変えて収穫スコアを育てるツール",
+  "title": "AIデータ積み器",
+  "description": "タップで色付きデータ片を重ねてAIセキュリティスコアを育てるツール",
   "kind": "tool",
-  "inspiration": "9月26日ハーベストムーン接近と台風後の秋の話題から",
+  "inspiration": "2026-09-24のOpenAI AIエージェントハック報道から",
   "file": "2026-09-24/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-24/",
-  "created_at": "2026-09-24T08:40:00.460Z"
+  "created_at": "2026-09-24T08:40:31.254Z"
 }
