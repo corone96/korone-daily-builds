@@ -1,10 +1,10 @@
 {
   "date": "2026-09-25",
-  "title": "月見台成長器",
-  "description": "タップで月見道具を重ねて夜の美しさを育てるツール",
+  "title": "AI調和積み器",
+  "description": "タップでAIと人間ピースを重ねて調和スコアを育てるツール",
   "kind": "tool",
-  "inspiration": "2026年9月25日の中秋の名月から",
+  "inspiration": "米中首脳会談のAI制御議論から",
   "file": "2026-09-25/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-25/",
-  "created_at": "2026-09-25T08:40:03.958Z"
+  "created_at": "2026-09-25T08:40:00.462Z"
 }
