@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>満月色育器</title>
+<style>
+body{margin:0;background:#0a0a1f;color:#fff;font-family:sans-serif;touch-action:none;overflow:hidden}
+header{text-align:center;padding:8px 0;font-size:14px;opacity:.8}
+#score{text-align:center;font-size:18px;margin:4px 0}
+#main{position:relative;width:100%;height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center}
+#moon{width:min(68vw,280px);height:min(68vw,280px);border-radius:50%;background:#ffeb3b;box-shadow:0 0 60px #ffeb3b,inset -40px -40px 60px rgba(0,0,0,.3);cursor:pointer;position:relative;transition:transform .1s}
+#moon:active{transform:scale(.96)}
+#moon::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.6) 0%,transparent 60%);pointer-events:none}
+.pattern{position:absolute;width:100%;height:100%;border-radius:50%;pointer-events:none}
+.crater{position:absolute;background:rgba(0,0,0,.25);border-radius:50%}
+#rabbit{position:absolute;font-size:42px;bottom:-18px;right:-22px;opacity:0;transition:all .3s}
+#grass{position:absolute;bottom:0;left:0;width:100%;height:80px;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;gap:6px}
+.grass{width:7px;background:#3a5f2e;border-radius:50% 50% 0 0;transition:height .2s}
+</style>
+</head>
+<body>
+<header>満月色育器</header>
+<div id="score">満月度 <span id="val">0</span>%</div>
+<div id="main">
+  <div id="moon">
+    <div id="patterns" class="pattern"></div>
+    <div id="rabbit">🐇</div>
+  </div>
+  <div id="grass"></div>
+</div>
+<script>
+const moon=document.getElementById('moon');
+const pats=document.getElementById('patterns');
+const rabbit=document.getElementById('rabbit');
+const grass=document.getElementById('grass');
+const val=document.getElementById('val');
+let score=0;
+let hue=50;
+let tapCount=0;
+
+function addCrater(){
+  const c=document.createElement('div');
+  c.className='crater';
+  const s=12+Math.random()*18;
+  c.style.width=c.style.height=s+'px';
+  c.style.left=Math.random()*80+10+'%';
+  c.style.top=Math.random()*80+10+'%';
+  pats.appendChild(c);
+  if(pats.children.length>12)pats.removeChild(pats.children[0]);
+}
+
+function growGrass(){
+  if(grass.children.length<9){
+    const g=document.createElement('div');
+    g.className='grass';
+    g.style.height='18px';
+    grass.appendChild(g);
+  }
+  const gs=grass.children;
+  for(let i=0;i<gs.length;i++){
+    const h=Math.min(72,parseInt(gs[i].style.height)+6+Math.random()*4);
+    gs[i].style.height=h+'px';
+  }
+}
+
+function updateMoon(){
+  hue=(hue+28)%360;
+  const lightness=68+Math.min(18,score/4);
+  moon.style.background=`hsl(${hue},92%,${lightness}%)`;
+  moon.style.boxShadow=`0 0 ${42+score/3}px hsl(${hue},92%,75%)`;
+  if(score>25)rabbit.style.opacity=Math.min(1,(score-25)/55);
+  if(score>35)rabbit.style.transform=`scale(${1+Math.min(0.6,(score-35)/80)})`;
+}
+
+function tap(e){
+  e.preventDefault();
+  score=Math.min(100,score+Math.floor(Math.random()*3)+2);
+  tapCount++;
+  val.textContent=score;
+  updateMoon();
+  if(tapCount%2===0)addCrater();
+  if(tapCount%3===0)growGrass();
+  if(score>=100){
+    moon.style.boxShadow+=' ,0 0 120px #fff';
+    setTimeout(()=>{alert('満月完成！美しい月見の夜になりました')},180);
+  }
+}
+moon.addEventListener('pointerdown',tap,{passive:false});
+moon.addEventListener('touchstart',tap,{passive:false});
+// initial grasses
+for(let i=0;i<5;i++){
+  const g=document.createElement('div');
+  g.className='grass';
+  g.style.height=18+Math.random()*12+'px';
+  grass.appendChild(g);
+}
+// first craters
+for(let i=0;i<3;i++)addCrater();
+</script>
+</body>
+</html>
