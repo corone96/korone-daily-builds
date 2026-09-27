@@ -1,10 +1,10 @@
 {
   "date": "2026-09-27",
-  "title": "月影パズル器",
-  "description": "満月周囲で秋作物パズルを解くツール",
+  "title": "祭り提灯彩り器",
+  "description": "タップで提灯を彩り祭り調和を育てるツール",
   "kind": "tool",
-  "inspiration": "2026年9月27日の満月と麦フェスから",
+  "inspiration": "秋祭りのみこしパレードや提灯飾りから",
   "file": "2026-09-27/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-27/",
-  "created_at": "2026-09-27T08:40:00.464Z"
+  "created_at": "2026-09-27T08:40:10.544Z"
 }
