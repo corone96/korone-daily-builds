@@ -1,10 +1,10 @@
 {
   "date": "2026-09-29",
-  "title": "雨粒リズムタップ",
-  "description": "タイミング合わせて雨のビートを刻むリズムパズル",
+  "title": "雨順並べパズル",
+  "description": "連続雨記録に挑む順序入れ替えパズル",
   "kind": "mini-game",
-  "inspiration": "東京連続降雨記録更新のニュース",
+  "inspiration": "東京の連続降水最長記録33日更新",
   "file": "2026-09-29/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-09-29/",
-  "created_at": "2026-09-29T08:40:00.476Z"
+  "created_at": "2026-09-29T08:40:16.040Z"
 }
