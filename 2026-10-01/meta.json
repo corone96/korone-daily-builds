@@ -1,10 +1,10 @@
 {
   "date": "2026-10-01",
-  "title": "コーヒー豆振り分け",
-  "description": "スワイプで豆を並べ完璧焙煎を競う",
+  "title": "コーヒーブリュータイミング",
+  "description": "長押しとスワイプで完璧コーヒーを淹れるリズムゲーム",
   "kind": "mini-game",
-  "inspiration": "10月1日国際コーヒーの日",
+  "inspiration": "10月1日のコーヒーの日",
   "file": "2026-10-01/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-01/",
-  "created_at": "2026-10-01T08:40:00.440Z"
+  "created_at": "2026-10-01T08:40:21.506Z"
 }
