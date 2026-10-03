@@ -1,10 +1,10 @@
 {
   "date": "2026-10-03",
-  "title": "タネ拾い秋探検",
-  "description": "スワイプで種を集め分類するパズル",
+  "title": "SL貴婦人リズム走行",
+  "description": "蒸気機関車をリズム操作で走らせるミニゲーム",
   "kind": "mini-game",
-  "inspiration": "秋の種集めシーズンから着想",
+  "inspiration": "SL貴婦人6年ぶり復活運行から",
   "file": "2026-10-03/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-03/",
-  "created_at": "2026-10-03T08:40:00.508Z"
+  "created_at": "2026-10-03T08:40:25.427Z"
 }
