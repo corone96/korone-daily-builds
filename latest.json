@@ -1,10 +1,10 @@
 {
   "date": "2026-10-06",
-  "title": "光遺伝脳迷路",
-  "description": "光で神経を操り脳の謎を解く短編探索ツール",
+  "title": "光遺伝脳探検",
+  "description": "タップで光を操り神経回路を解明する探索ツール",
   "kind": "tool",
-  "inspiration": "ノーベル生理学・医学賞の光遺伝学受賞",
+  "inspiration": "2026年ノーベル生理学・医学賞「光遺伝学」受賞",
   "file": "2026-10-06/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-06/",
-  "created_at": "2026-10-06T08:40:00.445Z"
+  "created_at": "2026-10-06T08:40:03.967Z"
 }
