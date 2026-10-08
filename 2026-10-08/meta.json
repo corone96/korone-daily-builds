@@ -1,10 +1,10 @@
 {
   "date": "2026-10-08",
-  "title": "分子キラリティ探検",
-  "description": "タップで分子の偏りを操り自己増殖を再現する探索ツール",
+  "title": "タコ迷宮探索",
+  "description": "タップ選択でタコの能力を使い海底の謎を解く短編アドベンチャー",
   "kind": "tool",
-  "inspiration": "ノーベル化学賞 硤合氏の分子非対称自己増殖発見",
+  "inspiration": "世界タコの日から着想",
   "file": "2026-10-08/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-08/",
-  "created_at": "2026-10-08T08:40:00.472Z"
+  "created_at": "2026-10-08T08:40:07.489Z"
 }
