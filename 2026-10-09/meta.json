@@ -1,10 +1,10 @@
 {
   "date": "2026-10-09",
-  "title": "ニュータイプ500号冒険",
-  "description": "タップ選択でアニメ史を探索する短編ツール",
+  "title": "流星夜の分岐路",
+  "description": "タップ選択で流星の謎を解く短編探索アドベンチャー",
   "kind": "tool",
-  "inspiration": "月刊ニュータイプ500号発売のアニメ史から",
+  "inspiration": "10月9日のりゅう座流星群極大",
   "file": "2026-10-09/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-09/",
-  "created_at": "2026-10-09T08:40:00.422Z"
+  "created_at": "2026-10-09T08:40:40.559Z"
 }
