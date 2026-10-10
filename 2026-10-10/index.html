@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>祝祭裏影探検</title>
+<style>
+body{margin:0;background:#112;font-family:sans-serif;color:#ddd;touch-action:none}
+#wrap{max-width:100%;min-height:100vh;display:flex;flex-direction:column}
+header{padding:8px;text-align:center;font-size:14px;border-bottom:1px solid #334}
+#main{flex:1;padding:12px;display:flex;flex-direction:column}
+#story{flex:1;font-size:17px;line-height:1.6;padding:10px;background:#223;border-radius:8px;margin-bottom:12px}
+#choices{display:flex;flex-direction:column;gap:8px}
+button{padding:14px;font-size:16px;background:#445;color:#fff;border:0;border-radius:8px}
+button:active{background:#667}
+#status{padding:6px 12px;font-size:13px;background:#223;border-top:1px solid #334;display:flex;justify-content:space-between}
+.end{font-size:15px;color:#9cf}
+</style>
+</head>
+<body>
+<div id="wrap">
+<header>祝祭裏影探検</header>
+<div id="main">
+<div id="story">体育の日の祭りの裏側へ…</div>
+<div id="choices"></div>
+</div>
+<div id="status"><span>調和の証: <span id="pts">0</span></span><span id="scene">入口</span></div>
+</div>
+<script>
+let pts=0,scene=0;
+const story=document.getElementById('story');
+const choices=document.getElementById('choices');
+const ptsEl=document.getElementById('pts');
+const sceneEl=document.getElementById('scene');
+function updateUI(){ptsEl.textContent=pts;}
+function clearChoices(){choices.innerHTML='';}
+function addChoice(txt,fn){const b=document.createElement('button');b.textContent=txt;b.addEventListener('pointerdown',fn,{once:true});choices.appendChild(b);}
+function showScene(){clearChoices();updateUI();
+if(scene===0){story.textContent='祭りの裏、影の通路に立っている。左の屋台裏か、右のステージ裏へ？';sceneEl.textContent='入口';addChoice('屋台裏へ',()=>go(1));addChoice('ステージ裏へ',()=>go(2));}
+else if(scene===1){story.textContent='屋台の陰で、隠しメニューを発見。調和の証を1つ得た。';pts++;updateUI();sceneEl.textContent='屋台';addChoice('次へ',()=>go(3));}
+else if(scene===2){story.textContent='ステージ裏で、衣装の乱れを直す手伝い。調和の証を1つ得た。';pts++;updateUI();sceneEl.textContent='ステージ';addChoice('次へ',()=>go(3));}
+else if(scene===3){story.textContent='中央の休憩所。もう一つの影を発見できる？';sceneEl.textContent='休憩所';addChoice('影を探す',()=>go(4));addChoice('そのまま進む',()=>go(5));}
+else if(scene===4){story.textContent='影の中に小さな和の印を発見！調和の証+1';pts++;updateUI();sceneEl.textContent='発見';addChoice('終わりへ',()=>end());}
+else if(scene===5){story.textContent='普通の裏側だった。';sceneEl.textContent='通常';addChoice('終わりへ',()=>end());}}
+function go(n){scene=n;showScene();}
+function end(){clearChoices();sceneEl.textContent='終了';
+let msg='';if(pts>=3)msg='真の調和を見た。祭りは静かに続く。';else if(pts>=2)msg='裏の調和を少し感じた。';else msg='日常の影だけが残った。';
+story.innerHTML=msg+'<br><span class="end">(タップで最初から)</span>';story.onclick=()=>{location.reload();};}
+showScene();
+</script>
+</body>
+</html>
