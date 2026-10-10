@@ -1,10 +1,10 @@
 {
   "date": "2026-10-10",
-  "title": "祝祭裏影探検",
-  "description": "体育の日フェス裏をタップ選択で探索する短編ツール",
+  "title": "秋祭影探索",
+  "description": "タップ選択で三連休祭りの裏側を冒険する短編ツール",
   "kind": "tool",
-  "inspiration": "体育の日三連休無料イベント・K-POP FESから",
+  "inspiration": "2026年10月10日の体育の日フェス・台湾文化祭から着想",
   "file": "2026-10-10/index.html",
   "url": "https://corone96.github.io/korone-daily-builds/2026-10-10/",
-  "created_at": "2026-10-10T08:40:00.420Z"
+  "created_at": "2026-10-10T08:40:12.873Z"
 }
