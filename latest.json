@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-11",
-  "title": "一気差し祭探索",
-  "description": "秋祭りの屋台を1タップで一気に差し上げる短編探索ツール",
+  "date": "2026-10-12",
+  "title": "体育の日軌道探検",
+  "description": "スポーツの日の鉄道イベントをタップ選択で探索する短編ツール",
   "kind": "tool",
-  "inspiration": "兵庫播磨地域の秋祭り「一気差し」から着想",
-  "file": "2026-10-11/index.html",
-  "url": "https://corone96.github.io/korone-daily-builds/2026-10-11/",
-  "created_at": "2026-10-11T08:40:30.163Z"
+  "inspiration": "2026年10月12日スポーツの日と各地鉄道イベントから",
+  "file": "2026-10-12/index.html",
+  "url": "https://corone96.github.io/korone-daily-builds/2026-10-12/",
+  "created_at": "2026-10-11T17:19:53.974Z"
 }
