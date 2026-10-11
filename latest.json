@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-10",
-  "title": "秋祭影探索",
-  "description": "タップ選択で三連休祭りの裏側を冒険する短編ツール",
+  "date": "2026-10-11",
+  "title": "一気差し祭探索",
+  "description": "秋祭りの屋台を1タップで一気に差し上げる短編探索ツール",
   "kind": "tool",
-  "inspiration": "2026年10月10日の体育の日フェス・台湾文化祭から着想",
-  "file": "2026-10-10/index.html",
-  "url": "https://corone96.github.io/korone-daily-builds/2026-10-10/",
-  "created_at": "2026-10-10T08:40:12.873Z"
+  "inspiration": "兵庫播磨地域の秋祭り「一気差し」から着想",
+  "file": "2026-10-11/index.html",
+  "url": "https://corone96.github.io/korone-daily-builds/2026-10-11/",
+  "created_at": "2026-10-11T08:40:30.163Z"
 }
