@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>胞子紋の盛り皿</title><style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;touch-action:none;user-select:none}
+body{font-family:"Hiragino Sans","Yu Gothic",sans-serif;color:#3a2416;background:radial-gradient(circle at 50% 20%,#f0c27a,#c47a3a 42%,#6e341c 100%);overflow:hidden}
+#app{height:100dvh;display:flex;flex-direction:column;padding:10px 12px 12px;gap:8px;max-width:640px;margin:0 auto}
+header h1{margin:0;font-size:clamp(18px,4.6vw,26px);letter-spacing:.08em;color:#fff8ee;text-shadow:0 1px 0 #6a3018}
+#hud{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pill{background:rgba(255,248,238,.92);border-radius:999px;padding:4px 10px;font-size:clamp(12px,3.3vw,15px);font-weight:700}
+.pill.warn{background:#2a1c16;color:#f3d7b0}
+.pill.hot{background:#8b1e1e;color:#fff}
+#plate{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+#board{width:min(96vw,68dvh);aspect-ratio:1;background:radial-gradient(circle at 50% 45%,#fff,#f4efe6 72%,#e4d3bc);border-radius:50%;box-shadow:0 10px 0 #8a4b28, inset 0 0 0 8px #fff, inset 0 0 40px rgba(120,70,30,.15);display:grid;grid-template-columns:repeat(4,1fr);gap:2.2%;padding:9%;position:relative}
+.cell{position:relative;border:0;border-radius:18%;background:rgba(255,255,255,.35);box-shadow:inset 0 0 0 1px rgba(90,60,30,.12);padding:0;touch-action:none}
+.cell.filled{background:transparent}
+.cap{position:absolute;inset:8%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(11px,3vw,16px);font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.cap.shiitake{background:radial-gradient(circle,#e7c39a 0 18%,#a56b3c 19% 32%,#c98955 33% 48%,#8a542c 49% 70%,#6b3e1e 71%)}
+.cap.enoki{background:radial-gradient(circle,#fff 0 12%,#f4e4c4 13% 28%,#fff 29% 40%,#e6d2a4 41% 62%,#cbb88a 63%);color:#6a5430;text-shadow:none}
+.cap.maitake{background:radial-gradient(circle,#d7c2b4 0 16%,#7a5a48 17% 30%,#b08978 31% 46%,#5c4033 47% 68%,#3e2a22 69%)}
+.cell.flash-good .cap{animation:pop .35s ease}
+.cell.flash-bad .cap{animation:shake .4s ease}
+.stain{position:absolute;inset:0;border-radius:18%;pointer-events:none;opacity:0}
+.stain.on{opacity:1;animation:spread .45s ease}
+.stain.good{background:radial-gradient(circle,rgba(214,120,40,.0),rgba(214,90,30,.45) 70%)}
+.stain.bad{background:radial-gradient(circle,rgba(0,0,0,.15),rgba(20,12,8,.72) 72%)}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes spread{from{transform:scale(.2);opacity:.2}to{transform:scale(1);opacity:1}}
+#float{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);font-size:clamp(20px,6vw,32px);font-weight:900;pointer-events:none;opacity:0;text-shadow:0 2px 0 #fff}
+#float.show{animation:flo .7s ease}
+@keyframes flo{0%{opacity:0;transform:translate(-50%,-20%)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%)}}
+#dock{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kind{border:0;border-radius:16px;padding:10px 6px 8px;background:#fff8ee;color:#3a2416;font-weight:800;touch-action:none;box-shadow:0 3px 0 #c9a27a}
+.kind small{display:block;font-weight:700;opacity:.75}
+.kind.on{outline:3px solid #fff;transform:translateY(1px)}
+.kind:disabled{opacity:.35}
+.overlay{position:fixed;inset:0;background:rgba(48,22,10,.72);display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:min(92vw,420px);background:#fff8ee;border-radius:20px;padding:18px 16px 16px;text-align:center;box-shadow:0 12px 0 rgba(0,0,0,.18)}
+.card h2{margin:0 0 8px;font-size:clamp(20px,5vw,28px)}
+.card p{margin:6px 0;line-height:1.45;font-size:clamp(13px,3.6vw,16px)}
+.btn{margin-top:10px;border:0;border-radius:999px;background:#8b3d1e;color:#fff8ee;font-weight:800;font-size:16px;padding:12px 22px;touch-action:none}
+.hidden{display:none}
+</style></head><body><div id="app"><header><h1>胞子紋の盛り皿</h1><div id="hud"></div></header><div id="plate"><div id="board"></div></div><div id="dock"></div></div><div id="float"></div><div id="title" class="overlay"><div class="card"><h2>胞子紋の盛り皿</h2><p>下のきのこを選んで空マスをタップ。異種の隣は色づき+10、同種は黒く滲んで腐る。</p><p>腐り3以下で16マスを埋めれば成功。4で失敗。</p><button class="btn" id="start" type="button">盛り始める</button></div></div><div id="result" class="overlay hidden"><div class="card"><h2 id="rh"></h2><p id="rs"></p><p id="rd"></p><button class="btn" id="again" type="button">もう一度</button></div></div><script>
+const TYPES={shiitake:{name:"しいたけ",pts:8,cls:"shiitake"},enoki:{name:"えのき",pts:8,cls:"enoki"},maitake:{name:"まいたけ",pts:18,cls:"maitake"}};
+const ORDER=["shiitake","enoki","maitake"];
+let cells,stock,sel,score,rot,placed,state;
+const board=document.getElementById("board");
+const hud=document.getElementById("hud");
+const dock=document.getElementById("dock");
+const title=document.getElementById("title");
+const result=document.getElementById("result");
+const floatEl=document.getElementById("float");
+function publish(){window.__game={score:score,state:state};}
+function neighbors(i){const r=i>>2,c=i&3,o=[];if(r>0)o.push(i-4);if(r<3)o.push(i+4);if(c>0)o.push(i-1);if(c<3)o.push(i+1);return o;}
+function rotStep(t){const hard=placed>=10;if(t==="maitake")return hard?3:2;return hard?2:1;}
+function reset(to){
+  cells=Array(16).fill(null);
+  stock={shiitake:6,enoki:5,maitake:5};
+  sel="shiitake";score=0;rot=0;placed=0;state=to;
+  title.classList.toggle("hidden",to!=="title");
+  result.classList.add("hidden");
+  render();
+  publish();
+}
+function render(flash,hits){
+  board.innerHTML="";
+  for(let i=0;i<16;i++){
+    const b=document.createElement("button");
+    b.type="button";b.className="cell";b.dataset.i=i;
+    const t=cells[i];
+    if(t){
+      b.classList.add("filled");
+      if(flash===i)b.classList.add(hits&&hits.some(h=>h.bad)?"flash-bad":"flash-good");
+      const cap=document.createElement("div");
+      cap.className="cap "+TYPES[t].cls;
+      cap.textContent=TYPES[t].name.slice(0,1);
+      b.appendChild(cap);
+    }
+    const stain=document.createElement("div");
+    stain.className="stain";
+    if(hits){const h=hits.find(x=>x.j===i);if(h){stain.classList.add("on",h.bad?"bad":"good");}}
+    if(flash===i&&hits){stain.classList.add("on",hits.some(h=>h.bad)?"bad":"good");}
+    b.appendChild(stain);
+    b.addEventListener("pointerdown",onCell,{passive:false});
+    board.appendChild(b);
+  }
+  dock.innerHTML="";
+  ORDER.forEach(k=>{
+    const b=document.createElement("button");
+    b.type="button";b.className="kind"+(sel===k?" on":"");
+    b.disabled=stock[k]<=0||state!=="playing";
+    b.innerHTML=TYPES[k].name+"<small>残"+stock[k]+" / +"+TYPES[k].pts+"</small>";
+    b.addEventListener("pointerdown",ev=>{ev.preventDefault();if(state!=="playing"||stock[k]<=0)return;sel=k;render();publish();},{passive:false});
+    dock.appendChild(b);
+  });
+  const hard=placed>=10;
+  hud.innerHTML="<span class='pill'>点数 "+score+"</span><span class='pill"+(rot>=3?" hot":"")+"'>腐り "+rot+"/3</span><span class='pill'>配置 "+placed+"/16</span><span class='pill"+(hard?" warn":"")+"'>"+(hard?"終盤 同種+2 舞茸+3":"序盤 同種+1 舞茸+2")+"</span>";
+}
+function pop(text,color){
+  floatEl.textContent=text;floatEl.style.color=color;
+  floatEl.classList.remove("show");void floatEl.offsetWidth;floatEl.classList.add("show");
+}
+function onCell(ev){
+  ev.preventDefault();
+  if(state!=="playing")return;
+  const i=+ev.currentTarget.dataset.i;
+  if(!sel||cells[i]||stock[sel]<=0)return;
+  const t=sel,step=rotStep(t);
+  let add=TYPES[t].pts,addRot=0;const hits=[];
+  neighbors(i).forEach(j=>{
+    if(!cells[j])return;
+    if(cells[j]===t){add-=10;addRot+=step;hits.push({j:j,bad:true});}
+    else{add+=10;hits.push({j:j,bad:false});}
+  });
+  cells[i]=t;stock[t]--;score+=add;rot+=addRot;placed++;
+  if(stock[t]<=0)sel=ORDER.find(k=>stock[k]>0)||null;
+  render(i,hits);
+  pop((add>=0?"+":"")+add+(addRot?" 腐り+"+addRot:""),addRot?"#6b1d1d":"#8b3d1e");
+  if(rot>=4){state="lost";publish();showResult();return;}
+  if(placed===16){state="won";publish();showResult();return;}
+  publish();
+}
+function showResult(){
+  const won=state==="won";
+  document.getElementById("rh").textContent=won?(rot===0&&score===418?"最高評価":"盛り切り成功"):"腐って失敗";
+  document.getElementById("rs").textContent="点数 "+score+" / 腐り "+rot;
+  document.getElementById("rd").textContent=won?(rot===0&&score===418?"胞子紋が皿いっぱいに揃った。":"腐り3以下で16マスを埋め切った。"):"腐りが4に達した。皿は黒く滲んでしまった。";
+  result.classList.remove("hidden");
+}
+function boot(ev){ev.preventDefault();reset("playing");}
+document.getElementById("start").addEventListener("pointerdown",boot,{passive:false});
+document.getElementById("again").addEventListener("pointerdown",boot,{passive:false});
+reset("title");
+</script></body></html>
